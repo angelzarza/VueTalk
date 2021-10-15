@@ -9,10 +9,12 @@ import utils from "./utils";
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
+  strict: true,
+
   state: {},
   mutations: {},
   actions: {
-    checkAuht() {},
+    // checkAuht() {},
   },
   modules: {
     messages,
@@ -25,4 +27,4 @@ const store = new Vuex.Store({
 export default store;
 
 // Initial load
-this.$store.dispatch("checkAuth");
+// this.$store.dispatch("checkAuth");
