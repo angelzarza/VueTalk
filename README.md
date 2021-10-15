@@ -1,5 +1,7 @@
 # vuetalk
 
+Web Chat (Firebase, Firestore, Clound Functions, Cloud Storage, Firebase Hosting) 
+
 ## Project setup
 ```
 npm install
