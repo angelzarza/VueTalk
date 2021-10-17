@@ -30,10 +30,12 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
-              <router-link class="button is-primary" to="/">
-                <strong>Profile</strong>
-              </router-link>
-              <a @click="doLogout" class="button is-light"> Log out </a>
+              <template v-if="user">
+                <router-link class="button is-primary" to="/">
+                  <strong>Profile</strong>
+                </router-link>
+                <a @click="doLogout" class="button is-light"> Log out </a>
+              </template>
             </div>
           </div>
         </div>
@@ -43,6 +45,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "NavBarComponent",
   mounted() {
@@ -60,7 +64,19 @@ export default {
       this.burger.classList.toggle("is-active");
       this.navBar.classList.toggle("is-active");
     },
-    doLogout() {},
+    async doLogout() {
+      try {
+        this.$store.dispatch("user/doLogout");
+        this.$router.push({ name: "Auth" });
+        console.log("Logged out");
+      } catch (error) {
+        console.error(error.message);
+      }
+    },
+  },
+
+  computed: {
+    ...mapState("user", ["user"]),
   },
 };
 </script>

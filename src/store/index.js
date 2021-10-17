@@ -6,15 +6,25 @@ import rooms from "./rooms";
 import user from "./user";
 import utils from "./utils";
 
+import { auth } from "../firebase.js";
+
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-  strict: true,
+  // strict: true,
 
   state: {},
   mutations: {},
   actions: {
-    // checkAuht() {},
+    checkAuht({ commit }) {
+      auth.onAuthStateChanged(function (user) {
+        if (user) {
+          commit("user/setUser", user);
+        } else {
+          commit("user/setUser", null);
+        }
+      });
+    },
   },
   modules: {
     messages,
@@ -27,4 +37,4 @@ const store = new Vuex.Store({
 export default store;
 
 // Initial load
-// this.$store.dispatch("checkAuth");
+store.dispatch("checkAuht");

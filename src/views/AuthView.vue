@@ -120,7 +120,7 @@ export default {
   data() {
     return {
       isLogin: true,
-      isLoading: true,
+      isLoading: false,
       userData: {
         name: "",
         email: "",
@@ -130,8 +130,48 @@ export default {
   },
 
   methods: {
-    doRegister() {},
-    doLogin() {},
+    redirectUser() {
+      this.$router.push({ name: "Home" });
+    },
+    resetData() {
+      this.userData.name = "";
+      this.userData.email = "";
+      this.userData.password = "";
+    },
+    async doLogin() {
+      this.isLoading = true;
+      try {
+        this.$store.dispatch("user/doLogin", {
+          email: this.userData.email,
+          password: this.userData.password,
+        });
+        console.log("Logged in");
+        this.resetData();
+        this.redirectUser();
+      } catch (error) {
+        console.error(error.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async doRegister() {
+      this.isLoading = true;
+      try {
+        this.$store.dispatch("user/doRegister", {
+          name: this.userData.name,
+          email: this.userData.email,
+          password: this.userData.password,
+        });
+        console.log("Account created");
+        this.resetData();
+        this.redirectUser();
+      } catch (error) {
+        console.error(error.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
   },
 };
 </script>
