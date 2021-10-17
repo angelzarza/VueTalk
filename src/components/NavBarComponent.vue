@@ -69,7 +69,7 @@ export default {
     },
     async doLogout() {
       try {
-        this.$store.dispatch("user/doLogout");
+        await this.$store.dispatch("user/doLogout");
         this.$router.push({ name: "Auth" });
         console.log("Logged out");
       } catch (error) {

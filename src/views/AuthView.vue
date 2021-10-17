@@ -141,7 +141,7 @@ export default {
     async doLogin() {
       this.isLoading = true;
       try {
-        this.$store.dispatch("user/doLogin", {
+        await this.$store.dispatch("user/doLogin", {
           email: this.userData.email,
           password: this.userData.password,
         });

@@ -15,9 +15,9 @@ const mutations = {
 const actions = {
   getCurrentUser() {
     return new Promise((resolve, reject) => {
-      const unsubcribe = auth.onAuthStateChanged(
+      const unsubscribe = auth.onAuthStateChanged(
         (user) => {
-          unsubcribe();
+          unsubscribe();
           resolve(user);
         },
         () => {
