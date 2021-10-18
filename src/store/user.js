@@ -63,6 +63,9 @@ const actions = {
     await auth.signOut();
     commit("setUser", null);
   },
+  async doReset(context, email) {
+    await auth.sendPasswordResetEmail(email);
+  },
 };
 
 export default {

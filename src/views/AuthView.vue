@@ -4,7 +4,7 @@
       <div class="columns">
         <div class="column is-half is-offset-one-quarter">
           <!-- Login form -->
-          <template v-if="isLogin">
+          <template v-if="action === 'login'">
             <h1 class="title has-text-centered">Login</h1>
             <form @submit.prevent="doLogin">
               <div class="field">
@@ -44,13 +44,16 @@
                   </button>
                 </div>
               </div>
-              <a href="#" @click="isLogin = false">Don't have an account?</a>
+              <a class="is-block" href="#" @click="action = 'register'"
+                >Don't have an account?</a
+              >
+              <a href="#" @click="action = 'reset'">Forgot your password?</a>
             </form>
           </template>
           <!-- End of login form -->
 
           <!-- Register form -->
-          <template v-else>
+          <template v-if="action === 'register'">
             <h1 class="title has-text-centered">Register</h1>
             <form @submit.prevent="doRegister">
               <div class="field">
@@ -103,10 +106,45 @@
                   </button>
                 </div>
               </div>
-              <a href="#" @click="isLogin = true">Want to login?</a>
+              <a href="#" @click="action = 'login'">Want to login?</a>
             </form>
           </template>
           <!-- End of register form -->
+
+          <!-- Password reset email -->
+          <template v-if="action === 'reset'">
+            <h1 class="title has-text-centered">Reset</h1>
+            <form @submit.prevent="doReset">
+              <div class="field">
+                <label class="label">Email</label>
+                <div class="control">
+                  <input
+                    v-model="userData.email"
+                    class="input"
+                    type="email"
+                    placeholder="e.g. alexsmith@gmail.com"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="field has-text-right">
+                <div class="control">
+                  <button
+                    type="submit"
+                    class="button is-link"
+                    :class="{ 'is-loading': isLoading }"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+              <a href="#" @click="action = 'register'"
+                >Don't have an account?</a
+              >
+            </form>
+          </template>
+          <!-- End of Password reset email -->
         </div>
       </div>
     </div>
@@ -119,7 +157,7 @@ export default {
 
   data() {
     return {
-      isLogin: true,
+      action: "login",
       isLoading: false,
       userData: {
         name: "",
@@ -166,6 +204,21 @@ export default {
         console.log("Account created");
         this.resetData();
         this.redirectUser();
+      } catch (error) {
+        console.error(error.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async doReset() {
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch("user/doReset", this.userData.email);
+        console.log(
+          `Please check ${this.userData.email} for further instructions`
+        );
+        this.resetData();
       } catch (error) {
         console.error(error.message);
       } finally {
