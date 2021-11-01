@@ -22,9 +22,13 @@
 
       <div id="navBar" class="navbar-menu" ref="navBar">
         <div class="navbar-start">
-          <router-link class="navbar-item" to="/"> Home </router-link>
+          <router-link class="navbar-item" :to="{ name: 'Home' }">
+            Home
+          </router-link>
 
-          <router-link class="navbar-item" to="/"> Create Room </router-link>
+          <router-link class="navbar-item" :to="{ name: 'Create' }">
+            Create Room
+          </router-link>
         </div>
 
         <div class="navbar-end">

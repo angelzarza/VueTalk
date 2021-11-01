@@ -4,7 +4,11 @@ const state = {
   user: null,
 };
 
-const getters = {};
+const getters = {
+  getUserUid(state) {
+    return state.user.uid;
+  },
+};
 
 const mutations = {
   setUser(state, user) {

@@ -13,15 +13,24 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   // strict: true,
 
-  state: {},
-  mutations: {},
+  state: {
+    isLoading: true,
+  },
+  mutations: {
+    setLoading(state, loading) {
+      state.isLoading = loading;
+    },
+  },
   actions: {
-    checkAuht({ commit }) {
+    checkAuht({ dispatch, commit }) {
       auth.onAuthStateChanged(function (user) {
         if (user) {
           commit("user/setUser", user);
+          dispatch("rooms/getRooms");
         } else {
           commit("user/setUser", null);
+          commit("rooms/setRooms", []);
+          commit("rooms/setRoomsListener", () => {});
         }
       });
     },
