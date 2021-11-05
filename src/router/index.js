@@ -67,6 +67,20 @@ const routes = [
       requiresAuth: true,
     },
   },
+
+  {
+    path: "/views/:id",
+    name: "View",
+    props: true,
+    // route level code-splitting
+    // this generates a separate chunk (views.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "views" */ "../views/ViewRoom.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
 ];
 
 const router = new VueRouter({
