@@ -1,4 +1,4 @@
-import { auth } from "../firebase.js";
+import { auth, db } from "../firebase.js";
 
 const state = {
   user: null,
@@ -37,6 +37,19 @@ const actions = {
     if (name) {
       await user.updateProfile({
         displayName: name,
+      });
+
+      db.runTransaction(async (transaction) => {
+        const query = await db
+          .collectionGroup("messages")
+          .where("userId", "==", state.user.uid)
+          .get();
+
+        query.forEach((doc) => {
+          transaction.update(doc.ref, {
+            userName: name,
+          });
+        });
       });
     }
 

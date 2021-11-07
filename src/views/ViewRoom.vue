@@ -17,6 +17,17 @@
               >
                 <p>
                   {{ message.message }}
+                  <span
+                    v-if="message.userId !== $store.getters['user/getUserUid']"
+                  >
+                    <br />
+                    <small class="message__time"
+                      ><i
+                        >{{ message.userName }}
+                        {{ message.createdAt | timeAgo }} ago</i
+                      ></small
+                    >
+                  </span>
                 </p>
               </div>
             </div>
@@ -50,21 +61,19 @@
 
 <script>
 import { mapState } from "vuex";
+const dayjs = require("dayjs");
+var relativeTime = require("dayjs/plugin/relativeTime");
+dayjs.extend(relativeTime);
+
 export default {
   name: "ViewRoom",
   async created() {
     try {
-      let room = this.$store.getters["rooms/getRoom"](this.id);
-      if (!room) {
-        room = await this.$store.dispatch("rooms/getRoom", this.id);
-        if (!room.exists) throw new Error("Could not find room");
-        room = room.data();
-      }
-      this.room = room;
+      this.room = await this.$store.dispatch("rooms/getRoom", this.id);
       this.$store.dispatch("messages/getMessages", this.id);
     } catch (error) {
       console.error(error.message);
-      this.$router.push({ name: "home" });
+      this.$router.push({ name: "Home" });
     }
   },
   destroyed() {
@@ -110,6 +119,14 @@ export default {
       }
     },
   },
+
+  filters: {
+    timeAgo(timestap) {
+      const date = new Date(timestap);
+      return dayjs(date).from(dayjs(date), true);
+    },
+  },
+
   computed: {
     ...mapState("messages", ["messages"]),
   },
@@ -130,6 +147,10 @@ export default {
     background-color: #baffc5;
     width: 75%;
     align-self: flex-end;
+  }
+  &__time {
+    color: gray;
+    font-size: 12px;
   }
 }
 .send {
